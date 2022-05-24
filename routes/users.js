@@ -1,12 +1,17 @@
 const express = require("express");
 const User = require("../models/User");
 const router = express.Router();
+console.log(typeof User);
+//change name on usermodel
 
 //creating a User
+///users/
 router.post("/", async (req, res) => {
   try {
+    console.log("running");
     let user = new User(req.body);
-    user = await User.save();
+    console.log(typeof user);
+    user = await user.save();
     res.status(200).json({
       status: 200,
       data: user,
@@ -21,7 +26,8 @@ router.post("/", async (req, res) => {
 
 // get all users
 //change later so just find the emails i think
-router.get("/users", async (req, res) => {
+//users/list/
+router.get("/list", async (req, res) => {
   try {
     let users = await User.find();
     res.status(200).json({

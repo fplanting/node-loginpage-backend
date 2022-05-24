@@ -6,7 +6,6 @@ const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const port = 3031;
 const config = require("./config");
 
 const usersRouter = require("./routes/users");
@@ -32,9 +31,5 @@ mongoose.connect(dbUrl, options, (err) => {
 app.use(cors());
 //app.use("/", indexRouter);
 app.use("/users", usersRouter);
-
-app.listen(port, function () {
-  console.log("running on " + port);
-});
 
 module.exports = app;
