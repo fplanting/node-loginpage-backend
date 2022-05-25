@@ -1,7 +1,9 @@
 const express = require("express");
 const User = require("../models/User");
 const router = express.Router();
+const cors = require("cors");
 console.log(typeof User);
+router.use(cors());
 //change name on usermodel
 
 //creating a User
@@ -42,14 +44,13 @@ router.get("/list", async (req, res) => {
   }
 });
 
-// find just one user
-//change to login and check if the person is logged in
-router.get("/:userId", async (req, res) => {
+// login
+//users/login
+router.get("/login", async (req, res) => {
   try {
-    let user = await User.findOne({
-      _id: req.params.userId,
-    });
-    if (user) {
+    const { email, password } = req.body;
+    let user = await User.findOne({ email });
+    if (user && (await user.matchPassword(password))) {
       res.status(200).json({
         status: 200,
         data: user,
@@ -57,7 +58,7 @@ router.get("/:userId", async (req, res) => {
     }
     res.status(400).json({
       status: 400,
-      message: "No user found",
+      message: "invalid email or password",
     });
   } catch (err) {
     res.status(400).json({
@@ -66,6 +67,21 @@ router.get("/:userId", async (req, res) => {
     });
   }
 });
+
+// try {
+//   let user = await User.findOne({
+//     _id: req.params.userId,
+//   });
+//   if (user) {
+//     res.status(200).json({
+//       status: 200,
+//       data: user,
+//     });
+//   }
+//   res.status(400).json({
+//     status: 400,
+//     message: "No user found",
+//   });
 
 // find one user and update
 //change this later to just change the email
