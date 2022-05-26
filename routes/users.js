@@ -27,9 +27,10 @@ router.post("/", async (req, res) => {
 
 // login
 //users/login
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(req.body);
     let user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
       let newUser = { email: user.email, id: user._id };
