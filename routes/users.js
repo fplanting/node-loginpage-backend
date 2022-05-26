@@ -12,29 +12,10 @@ router.post("/", async (req, res) => {
   try {
     console.log("running");
     let user = new User(req.body);
-    console.log(typeof user);
     user = await user.save();
     res.status(200).json({
       status: 200,
       data: user,
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 400,
-      message: err.message,
-    });
-  }
-});
-
-// get all users
-//change later so just find the emails i think
-//users/list/
-router.get("/list", async (req, res) => {
-  try {
-    let users = await User.find();
-    res.status(200).json({
-      status: 200,
-      data: users,
     });
   } catch (err) {
     res.status(400).json({
@@ -51,14 +32,33 @@ router.get("/login", async (req, res) => {
     const { email, password } = req.body;
     let user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
+      let newUser = { email: user.email, id: user._id };
       res.status(200).json({
         status: 200,
-        data: user,
+        data: newUser,
+      });
+    } else {
+      res.status(400).json({
+        status: 400,
+        message: "invalid email or password",
       });
     }
+  } catch (err) {
     res.status(400).json({
       status: 400,
-      message: "invalid email or password",
+      message: err.message,
+    });
+  }
+});
+
+// get email & subscription
+//users/list/
+router.get("/list", async (req, res) => {
+  try {
+    let users = await User.find({}, { email: 1, subscription: 1 });
+    res.status(200).json({
+      status: 200,
+      data: users,
     });
   } catch (err) {
     res.status(400).json({
@@ -68,23 +68,33 @@ router.get("/login", async (req, res) => {
   }
 });
 
-// try {
-//   let user = await User.findOne({
-//     _id: req.params.userId,
-//   });
-//   if (user) {
-//     res.status(200).json({
-//       status: 200,
-//       data: user,
-//     });
-//   }
-//   res.status(400).json({
-//     status: 400,
-//     message: "No user found",
-//   });
+// get subscription
+router.get("/:userId", async (req, res) => {
+  try {
+    let user = await User.findById(req.params.userId, {
+      email: 1,
+      subscription: 1,
+    });
+    if (user) {
+      res.status(200).json({
+        status: 200,
+        data: user,
+      });
+    } else {
+      res.status(400).json({
+        status: 400,
+        message: "No user found",
+      });
+    }
+  } catch (err) {
+    res.status(400).json({
+      status: 400,
+      message: err.message,
+    });
+  }
+});
 
-// find one user and update
-//change this later to just change the email
+// find subscription for user and update
 router.put("/:userId", async (req, res) => {
   try {
     let user = await User.findByIdAndUpdate(req.params.userId, req.body, {
@@ -95,32 +105,10 @@ router.put("/:userId", async (req, res) => {
         status: 200,
         data: user,
       });
-    }
-    res.status(400).json({
-      status: 400,
-      message: "No post found",
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 400,
-      message: err.message,
-    });
-  }
-});
-
-// delete a user, maybe not needed
-router.delete("/:userId", async (req, res) => {
-  try {
-    let user = await User.findByIdAndRemove(req.params.userId);
-    if (user) {
-      res.status(200).json({
-        status: 200,
-        message: "Post deleted successfully",
-      });
     } else {
       res.status(400).json({
         status: 400,
-        message: "No post found",
+        message: "No user found",
       });
     }
   } catch (err) {
@@ -130,13 +118,5 @@ router.delete("/:userId", async (req, res) => {
     });
   }
 });
-
-// router.post("/login", (req, res) => {
-//   res.send("inlogg");
-// });
-
-// router.post("/addUser", (req, res) => {
-//   res.send("addUser");
-// });
 
 module.exports = router;
