@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>UserList</title>
+</head>
+
+<body>
+    <h2>All users</h2>
+    <div id="allUsers"></div>
+    <h2>All subscriptions</h2>
+    <div id="allSubscriptions"></div>
+</body>
+
+<script>
+    fetch("/admin/list")
+        .then((resp) => resp.json())
+        .then((resp) => {
+            console.log(resp)
+            if (resp.status == 200) {
+                let allUsers = "";
+                let allSubscriptions = "";
+                for (let user of resp.data) {
+                    allUsers += `<div>${user.email}</div>`;
+                    if (user.subscription) {
+                        allSubscriptions += `<div>${user.email}</div>`;
+                    }
+                }
+                document.getElementById("allUsers").innerHTML = allUsers;
+                document.getElementById("allSubscriptions").innerHTML = allSubscriptions;
+            } else {
+                console.log("error", resp)
+            }
+        })
+        .catch((err) => {
+            console.error(err)
+        });
+</script>
+
+</html>
