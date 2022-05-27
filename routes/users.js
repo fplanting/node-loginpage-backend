@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
     console.log(req.body);
     let user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
-      let newUser = { email: user.email, id: user._id };
+      let newUser = { id: user._id };
       res.status(200).json({
         status: 200,
         data: newUser,
