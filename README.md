@@ -26,6 +26,8 @@ A backend and frontend login page.\
 Register an account and subscribe to a newsletter, login and see your information and change status on subscription.\
 All users get collected in a MongoDB database.
 
+[To view it live in Heroku, click here.](https://node-loginpage.herokuapp.com/)
+
 ### Packages used
 
 express \
