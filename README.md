@@ -22,7 +22,7 @@ Once started open [http://localhost:3000](http://localhost:3000) to view it in y
 
 School project.\
 A backend and frontend login page.\
-[https://github.com/fplanting/node-loginpage-frontend](Click here to get to frontend).\
+[Click here to get to frontend](https://github.com/fplanting/node-loginpage-frontend).\
 Register an account and subscribe to a newsletter, login and see your information and change status on subscription.\
 All users get collected in a MongoDB database.
 
@@ -34,4 +34,4 @@ mongodb \
 mongoose \
 nodemon \
 cors \
-dotenv \
+dotenv
