@@ -3,7 +3,6 @@ const User = require("../models/User");
 const router = express.Router();
 const cors = require("cors");
 router.use(cors());
-//change name on usermodel
 
 //creating a User
 ///users/
